@@ -1,12 +1,5 @@
 <?php
-	require_once './app/Configuration.php';
-	require_once './sys/DataBase.php';
-
-	# DataBase::execute('INSERT INTO post (user_id, title, link, content) VALUES (?, ?, ?, ?);', [1, 'Another post in the database', 'another-post-in-the-database', 'This is the content of the second post in the Limitless Bayou API project.']);
-
-	$data = DataBase::selectMany('SELECT * FROM post ORDER BY created_at DESC LIMIT 0, 20;');
-	print_r($data);
-	exit;
+	require_once './sys/BayouCore.php';
 
 	ob_clean();
 	header('Content-type: text/json; charset=utf-8');
