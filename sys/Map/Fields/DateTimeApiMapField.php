@@ -3,7 +3,7 @@
         private $minimum = NULL;
         private $maximum = NULL;
 
-        public function __construct($name, $minimum = NULL, $maximum = NULL) {
+        public function __construct(string $name, string $minimum = NULL, string $maximum = NULL) {
             parent::__construct($name);
 
             if ($minimum != NULL) {
@@ -15,25 +15,25 @@
             }
         }
 
-        public function isValid($value) {
+        public function isValid($value) : bool {
             if (!is_string($value) or !preg_match('/^[0-9]{4}\-[0-9]{2}\-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/', $value)) {
                 return FALSE;
             }
 
-            $value = strtotime($value);
+            $timestamp = strtotime($value);
 
-            if ($this->minimum !== NULL and $value < $this->minimum) {
+            if ($this->minimum !== NULL and $timestamp < $this->minimum) {
                 return FALSE;
             }
 
-            if ($this->maximum !== NULL and $this->maximum < $value) {
+            if ($this->maximum !== NULL and $this->maximum < $timestamp) {
                 return FALSE;
             }
 
             return TRUE;
         }
 
-        public function describe() {
+        public function describe() : string {
             return 'This field stores a datetime value in the format YYYY-MM-DD HH:MM:SS' .
                 (($this->minimum) !== NULL?' which cannot be smaller than ' . date('Y-m-d H:i:s', $this->minimum) : '') .
                 (($this->maximum !== NULL)?(($this->minimum !== NULL)?' and':' which') . ' cannot be larger than ' . date('Y-m-d H:i:s', $this->maximum) : '') . '.';

@@ -5,43 +5,41 @@
         private $identifier = NULL;
         private $fields;
 
-        public function __construct($name, $description) {
+        public function __construct(string $name, string $description) {
             $this->name = $name;
             $this->description = $description;
-            $this->fields = array();
+            $this->fields = [];
         }
 
-        public function getName() {
+        public function getName() : string {
             return $this->name;
         }
 
-        public function getDescription() {
+        public function getDescription() : string {
             return $this->description;
         }
 
-        public function setIdentifier($identifier) {
+        public function setIdentifier(string $identifier) {
             $this->identifier = $identifier;
         }
 
-        public function getIdentifier() {
+        public function getIdentifier() : string {
             return $this->identifier;
         }
 
-        public function addField($name, $field) {
+        public function addField($name, ApiMapField $field) {
             $this->fields[$name] = $field;
         }
 
-        public function getField($name) {
-            if (isset($this->fields[$name])) {
-                return $this->fields[$name];
-            }
+        public function getField($name) : ApiMapField {
+            return $this->fields[$name] ?? null;
         }
 
-        public function getFields() {
+        public function getFields() : array {
             return $this->fields;
         }
 
-        public function describe() {
+        public function describe() : string {
             $documentation = '';
             $documentation .= '<table class="map">';
             $documentation .= '<tr>';

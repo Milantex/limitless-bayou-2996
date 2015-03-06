@@ -2,15 +2,15 @@
     abstract class ApiMapField {
         private $name;
 
-        public function __construct($name) {
+        public function __construct(string $name) {
             $this->name = $name;
         }
 
-        public function getName() {
+        public function getName() : string {
             return $this->name;
         }
 
-        public abstract function isValid($value);
+        public abstract function isValid($value) : bool;
 
-        public abstract function describe();
+        public abstract function describe() : string;
     }

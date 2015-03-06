@@ -1,20 +1,16 @@
 <?php
     final class ApiMaps {
-        private static $maps = array();
+        private static $maps = [];
 
-        public static function addMap($name, $description) {
+        public static function addMap(string $name, string $description) {
             static::$maps[$name] = new ApiMap($name, $description);
         }
 
-        public static function getMap($name) {
-            if (isset(static::$maps[$name])) {
-                return static::$maps[$name];
-            } else {
-                return FALSE;
-            }
+        public static function getMap(string $name) : ApiMap {
+            return static::$maps[$name] ?? FALSE;
         }
 
-        public static function getMaps() {
+        public static function getMaps() : array {
             return static::$maps;
         }
     }
