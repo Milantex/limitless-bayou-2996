@@ -5,7 +5,13 @@
         private $identifier = NULL;
         private $fields;
 
+        const MAP_NAME_PATTERN = '|^[a-z]{2,}\.[a-z][a-z0-9_]*[a-z0-9]$|';
+
         public function __construct(string $name, string $description) {
+            if (!preg_match(ApiMap::MAP_NAME_PATTERN, $name)) {
+                throw new Exception("The name of the map does not match the required pattern: " . ApiMap::MAP_NAME_PATTERN . ".");
+            }
+
             $this->name = $name;
             $this->description = $description;
             $this->fields = [];

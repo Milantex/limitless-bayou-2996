@@ -1,12 +1,17 @@
 <?php
     require_once './sys/BayouCore.php';
 
-    ob_clean();
-    header('Content-type: text/json; charset=utf-8');
-    $data = [
-        'timestamp' => date('r'),
-        'reference' => rand(1000000, 9999999),
-        'ipaddress' => $_SERVER['REMOTE_ADDR']
-    ];
-    echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-    exit();
+    $mapName = filter_input(INPUT_GET, 'map', FILTER_SANITIZE_STRING);
+    if (!preg_match(ApiMap::MAP_NAME_PATTERN, $mapName)) {
+        new ApiResponse(ApiResponse::STATUS_ERROR, "Invalid map name or map name not supplied.");
+    }
+
+    $mapPath = 'app/maps/' . $mapName . '.map.php';
+    if (!file_exists($mapPath)) {
+        new ApiResponse(ApiResponse::STATUS_ERROR, "The requested map does not exist on this domain.");
+    }
+
+    $map = require_once $mapPath;
+
+    new ApiResponse();
+
