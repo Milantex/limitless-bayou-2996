@@ -7,13 +7,14 @@
 
         const STATUS_OK = 'ok';
         const STATUS_ERROR = 'error';
+        const STATUS_INFO = 'information';
 
         const TYPE_ARRAY  = 'array';
         const TYPE_OBJECT = 'object';
         const TYPE_STRING = 'string';
         const TYPE_NUMBER = 'number';
 
-        public function __construct($status = ApiResponse::STATUS_OK, $content = []) {
+        public function __construct($status = ApiResponse::STATUS_INFO, $content = []) {
             $this->status  = $status;
             $this->content = $content;
             $this->timestamp = microtime(true);

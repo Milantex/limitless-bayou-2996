@@ -45,6 +45,14 @@
             return $this->fields;
         }
 
+        public function handle(stdClass $json) {
+            // TODO: Parse the JSON request structure and handle the request
+            
+            // For now, return it to the test script
+            echo json_encode($json);
+            exit;
+        }
+
         public function describe() : string {
             $documentation = '';
             $documentation .= '<table class="map">';
@@ -57,7 +65,7 @@
             $documentation .= '<tr>';
             $documentation .= '<th colspan="2">Fields:</th>';
             $documentation .= '</tr>';
-            foreach ($this->fields as $name => $field) {
+            foreach ($this->fields as $field) {
                 $documentation .= '<tr>';
                 $documentation .= '<th>' . htmlspecialchars($field->getName()) . '</th>';
                 $documentation .= '<td>' . htmlspecialchars($field->describe()) . '</td>';

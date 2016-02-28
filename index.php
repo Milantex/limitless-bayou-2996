@@ -13,5 +13,17 @@
 
     $map = require_once $mapPath;
 
-    new ApiResponse();
+    $method = filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 
+    if ($method == 'POST') {
+        $request = file_get_contents("php://input");
+        $json = json_decode($request);
+
+        if (!$json or !is_object($json)) {
+            new ApiResponse(ApiResponse::STATUS_ERROR, "The request data is not a valid JSON structure.");
+        }
+
+        $map->handle($json);
+    } else {
+        new ApiResponse(ApiResponse::STATUS_INFO, $map->describe());
+    }
