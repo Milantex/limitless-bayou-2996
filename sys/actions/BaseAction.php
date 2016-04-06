@@ -1,4 +1,4 @@
 <?php
     abstract class BaseAction implements ActionInterface {
-        public function handle(stdClass $actionSpecification);
+        public abstract function handle(stdClass $actionSpecification);
     }
