@@ -46,11 +46,13 @@
         }
 
         public function handle(stdClass $json) {
-            // TODO: Parse the JSON request structure and handle the request
-            
-            // For now, return it to the test script
-            echo json_encode($json);
-            exit;
+            $handler = new RequestHandler($json);
+
+            if (!$handler->isValid()) {
+                new ApiResponse(ApiResponse::STATUS_ERROR, 'The request is not in the valid format.');
+            }
+
+            $handler->run();
         }
 
         public function describe() : string {
