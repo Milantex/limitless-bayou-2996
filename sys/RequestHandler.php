@@ -1,5 +1,7 @@
 <?php
     final class RequestHandler {
+        private $map;
+
         const ACTION_FIND_ONE  = 'findOne';
         const ACTION_FIND_MANY = 'findMany';
         const ACTION_ADD       = 'add';
@@ -18,8 +20,9 @@
         private $action = NULL;
         private $actionHandlerClass = NULL;
 
-        public function __construct(stdClass $request) {
+        public function __construct(stdClass $request, ApiMap $map) {
             $this->request = $request;
+            $this->map = $map;
             $this->parse();
         }
 
@@ -44,7 +47,8 @@
             if ($this->isValid()) {
                 $action = $this->action;
                 $request = $this->request;
-                $actionHandler = new $this->actionHandlerClass;
+                $className = $this->actionHandlerClass;
+                $actionHandler = new $className($this->map);
                 $actionHandler->handle($request->$action);
             }
         }
