@@ -1,5 +1,5 @@
 <?php
-    $map = new ApiMap('blog.user', 'Blog users');
+    $map = new ApiMap('blog.user', 'user', 'Blog users');
 
     $map->addField('user_id', new NumericApiMapField('User ID', TRUE, 1));
     $map->addField('created_at', new DateTimeApiMapField('Date of creation'));
