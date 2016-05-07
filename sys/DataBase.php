@@ -33,11 +33,11 @@
             }
         }
 
-        public static function selectOne($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION) : stdClass {
+        public static function selectOne($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION) {
             return static::select($sql, $parameters, $connection, TRUE);
         }
 
-        public static function selectMany($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION) : array {
+        public static function selectMany($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION) {
             return static::select($sql, $parameters, $connection, FALSE);
         }
 
