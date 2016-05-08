@@ -10,7 +10,7 @@
             return $this->map;
         }
 
-        protected function parseActionSpecification(stdClass &$actionSpecification) {
+        protected function parseActionSpecification(stdClass &$actionSpecification, ActionParameters &$actionParameters) {
             $string = '';
 
             $actionKeys = get_object_vars($actionSpecification);
@@ -19,43 +19,70 @@
                 new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Action specification object must contain only one key.');
             }
 
-            $actionNames = array_keys($actionKeys);
-            $actionKey = $actionNames[0];
+            $actionKey = array_keys($actionKeys)[0];
 
             if ($actionKey === '_and') {
                 if (!is_array($actionSpecification->_and)) {
                     new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Action key _and must be an array.');
                 }
 
-                $string .= $this->parseAndAction($actionSpecification->_and);
+                $string .= $this->parseAndAction($actionSpecification->_and, $actionParameters);
             } else if ($actionKey === '_or') {
                 if (!is_array($actionSpecification->_or)) {
                     new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Action key _or must be an array.');
                 }
 
-                $string .= $this->parseOrAction($actionSpecification->_or);
+                $string .= $this->parseOrAction($actionSpecification->_or, $actionParameters);
             } else {
-                if (!is_object($actionSpecification->$actionKey)) {
-                    new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Parameter value key must be an object.');
-                }
-
-                $string .= ' ( ' . $actionKey . ' ' . $this->parseParameterValue($actionSpecification->$actionKey, $actionKey) . ' ) ';
+                $string .= $this->parseParameterValue($actionSpecification, $actionKey, $actionParameters);
             }
 
             return $string;
         }
 
-        protected function parseParameterValue(stdClass $parameterValue, string $parameterName) {
-            $string = '';
+        private function parseParameterValue(stdClass &$actionSpecification, string $actionKey, ActionParameters &$actionParameters) {
+            $keyNameValue = $this->getParameterKeyNameAndValue($actionSpecification, $actionKey);
+            $this->checkParameterValidity($keyNameValue);
+            list($parameterKey, $parameterName, $parameterValue) = $keyNameValue;
 
+            $operator = $this->getOperator($parameterKey);
+
+            if ($operator === '') {
+                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Invalid parameter:' . $parameterName . ' value action:' . htmlspecialchars($parameterKey)) . ' given.';
+            }
+
+            $string = ' ( ' . $actionKey . ' ' . $operator;
+
+            if ($operator === ' LIKE ' and !$this->modifyParameterValueForLikeOperators($parameterKey, $parameterValue)) {
+                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Invalid parameter:' . $parameterName . ' value action:' . htmlspecialchars($parameterKey)) . ' given.';
+            }
+
+            $actionParameterName = $actionParameters->getNextGenericParameterName();
+            $actionParameters->addParameter($actionParameterName, $parameterValue->$parameterKey);
+
+            return $string . $actionParameterName . ' ) ';
+        }
+
+        private function getParameterKeyNameAndValue(stdClass &$actionSpecification, string $actionKey) {
+            if (!is_object($actionSpecification->$actionKey)) {
+                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Parameter value key must be an object.');
+            }
+
+            $parameterValue = $actionSpecification->$actionKey;
+            $parameterName = $actionKey;
             $parameterValueKeys = get_object_vars($parameterValue);
 
             if (count($parameterValueKeys) != 1) {
                 new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. The parameter:' . $parameterName . ' value object must contain only one key.');
             }
 
-            $parameterValueNames = array_keys($parameterValueKeys);
-            $parameterKey = $parameterValueNames[0];
+            $parameterKey = array_keys($parameterValueKeys)[0];
+
+            return [$parameterKey, $parameterName, $parameterValue];
+        }
+
+        private function checkParameterValidity(array &$parameterKeyNameValue) {
+            list($parameterKey, $parameterName, $parameterValue) = $parameterKeyNameValue;
 
             $field = $this->getMap()->getField($parameterName);
 
@@ -65,48 +92,53 @@
 
             if (!$field->isValid($parameterValue->$parameterKey)) {
                 new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. The parameter:' . $parameterName . ' value is invalid.');
-            }            
-
-            if ($parameterKey === '_eq') {
-                $string .= ' = \'' . $parameterValue->$parameterKey . '\'';
-            } else if ($parameterKey === '_lt') {
-                $string .= ' < \'' . $parameterValue->$parameterKey . '\'';
-            } else if ($parameterKey === '_lte') {
-                $string .= ' <= \'' . $parameterValue->$parameterKey . '\'';
-            } else if ($parameterKey === '_gt') {
-                $string .= ' > \'' . $parameterValue->$parameterKey . '\'';
-            } else if ($parameterKey === '_gte') {
-                $string .= ' >= \'' . $parameterValue->$parameterKey . '\'';
-            } else if ($parameterKey === '_ne') {
-                $string .= ' != \'' . $parameterValue->$parameterKey . '\'';
-            } else if ($parameterKey === '_begins') {
-                $string .= ' LIKE \'' . $parameterValue->$parameterKey . '%\'';
-            } else if ($parameterKey === '_ends') {
-                $string .= ' LIKE \'%' . $parameterValue->$parameterKey . '\'';
-            } else if ($parameterKey === '_contains') {
-                $string .= ' LIKE \'%' . $parameterValue->$parameterKey . '%\'';
-            } else {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Invalid parameter:' . $parameterName . ' value action:' . htmlspecialchars($parameterKey)) . ' given.';
             }
-
-            return $string;
         }
 
-        protected function parseAndAction(array $andList) {
+        private function getOperator(string $parameterKey) : string {
+            switch ($parameterKey) {
+                case '_eq' : return ' = ';
+                case '_lt' : return ' < ';
+                case '_lte' : return ' <= ';
+                case '_gt' : return ' > ';
+                case '_gte' : return ' >= ';
+                case '_ne' : return ' != ';
+                case '_begins' :
+                case '_ends' :
+                case '_contains' : return ' LIKE ';
+                default: return '';
+            }
+        }
+
+        private function modifyParameterValueForLikeOperators(string $parameterKey, stdClass &$parameterValue) {
+            if ($parameterKey === '_begins') {
+                $parameterValue->$parameterKey .= '%';
+            } else if ($parameterKey === '_ends') {
+                $parameterValue->$parameterKey = '%' . $parameterValue->$parameterKey;
+            } else if ($parameterKey === '_contains') {
+                $parameterValue->$parameterKey = '%' . $parameterValue->$parameterKey . '%';
+            } else {
+                return false;
+            }
+
+            return true;
+        }
+
+        private function parseAndAction(array $andList, ActionParameters &$actionParameters) {
             $items = [];
 
             foreach ($andList as $actionSpecification) {
-                $items[] = $this->parseActionSpecification($actionSpecification);
+                $items[] = $this->parseActionSpecification($actionSpecification, $actionParameters);
             }
 
             return ' ( ' . implode(' AND ', $items) . ' ) ';
         }
 
-        protected function parseOrAction(array $orList) {
+        private function parseOrAction(array $orList, ActionParameters &$actionParameters) {
             $items = [];
 
             foreach ($orList as $actionSpecification) {
-                $items[] = $this->parseActionSpecification($actionSpecification);
+                $items[] = $this->parseActionSpecification($actionSpecification, $actionParameters);
             }
 
             return ' ( ' . implode(' OR ', $items) . ' ) ';
