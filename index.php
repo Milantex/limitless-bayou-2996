@@ -1,6 +1,8 @@
 <?php
     require_once './sys/BayouCore.php';
 
+    define('REQUEST_TIME', microtime(true));
+
     $mapName = filter_input(INPUT_GET, 'map', FILTER_SANITIZE_STRING);
     if (!preg_match(ApiMap::MAP_NAME_PATTERN, $mapName)) {
         new ApiResponse(ApiResponse::STATUS_ERROR, "Invalid map name or map name not supplied.");

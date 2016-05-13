@@ -1,23 +1,97 @@
 <?php
+    /**
+     * The ApiResponse class is used to sent the API response instantly upon
+     * creation of an ApiResponse object. Each object has an 
+     */
     final class ApiResponse {
+        /**
+         * The return status of the API response.
+         * Currently, only three values are possible: ok, error and information
+         * @var string
+         */
         public $status;
+
+        /**
+         * The type of the returned content. This is set automatically.
+         * Currently, only values array, object, string and number are possible
+         * @var string
+         */
         public $type;
-        public $timestamp;
+
+        /**
+         * The timestamp when the request processing began
+         * @var float
+         */
+        public $timestampStart;
+
+        /**
+         * The timestamp when the request processing was finished
+         * @var float
+         */
+        public $timestampEnd;
+
+        /**
+         * The duration of request processing
+         * @var float
+         */
+        public $executionDuration;
+
+        /**
+         * The content of the API response
+         * @var mixed
+         */
         public $content;
 
+        /**
+         * API response status used when everything was all right
+         */
         const STATUS_OK = 'ok';
+
+        /**
+         * API response status used when there was an error
+         */
         const STATUS_ERROR = 'error';
+
+        /**
+         * A special API response status used in certain situations
+         */
         const STATUS_INFO = 'information';
 
+        /**
+         * API response content type indicator when the content is an array
+         */
         const TYPE_ARRAY  = 'array';
+
+        /**
+         * API response content type indicator when the content is an object
+         */
         const TYPE_OBJECT = 'object';
+
+        /**
+         * API response content type indicator when the content is a string
+         */
         const TYPE_STRING = 'string';
+
+        /**
+         * API response content type indicator when the content is a number
+         */
         const TYPE_NUMBER = 'number';
 
+        /**
+         * The ApiResponse constructor function takes the status type indicator
+         * and the content that should be sent. If no arguments are given, the
+         * response has the status value set to information and the content is
+         * an empty array. When the ApiResponse object is created the response
+         * is momentarily sent as a JSON structure.
+         * @param string $status
+         * @param mixed $content
+         */
         public function __construct($status = ApiResponse::STATUS_INFO, $content = []) {
             $this->status  = $status;
             $this->content = $content;
-            $this->timestamp = microtime(true);
+            $this->timestampStart = REQUEST_TIME;
+            $this->timestampEnd = microtime(true);
+            $this->executionDuration = $this->timestampEnd - $this->timestampStart;
 
             if (is_object($content)) {
                 $this->type = ApiResponse::TYPE_OBJECT;
@@ -30,9 +104,21 @@
                 $this->content = strval($content);
             }
 
-            ob_clean();
-            header('Content-type: text/json; charset=utf-8');
+            $this->sendHeaders();
             echo json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
             exit;
+        }
+
+        /**
+         * Clears the output buffer and sends out the necessary HTTP headers
+         * before the function can send the response payload.
+         */
+        private function sendHeaders() {
+            ob_clean();
+            header("Pragma: no-cache");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+            header('Content-type: text/json; charset=utf-8');
+            header("Connection: close");
         }
     }
