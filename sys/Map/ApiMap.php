@@ -111,6 +111,15 @@
         }
 
         /**
+         * Checks if a field with the given name exists in this map.
+         * @param string $name
+         * @return bool
+         */
+        public function fieldExists(string $name): bool {
+            return isset($this->fields[$name]);
+        }
+
+        /**
          * Returns the ApiMapField object containing information about the field
          * with the specified name. If no such field exists in the map's field
          * list, this method returns NULL.
