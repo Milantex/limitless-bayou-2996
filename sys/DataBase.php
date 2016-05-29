@@ -10,6 +10,12 @@
         private static $connections = [];
 
         /**
+         * Stores the error recorded after the last execute method was ran
+         * @var array
+         */
+        private static $lastExecutionError = [];
+
+        /**
          * Returns an instance of the PDO object for a particular configured
          * database connection. If the connection has not yet been made it opens
          * a new connection and stores it for later reuse.
@@ -99,6 +105,23 @@
                 return NULL;
             }
 
-            return $prep->execute($parameters);
+            $res = $prep->execute($parameters);
+            if (!$res) {
+                static::$lastExecutionError[$connection] = $prep->errorInfo();
+            }
+
+            return $res;
+        }
+
+        /**
+         * Returns the error recorded after the last execute method failure.
+         * One error can be retrieved once. After it is returned, it is reset.
+         * @param string $connection
+         * @return array|NULL
+         */
+        public static function getLastExecutionError($connection = DEFAULT_DATABASE_CONNECTION) {
+            $error = static::$lastExecutionError[$connection];
+            static::$lastExecutionError[$connection] = NULL;
+            return $error;
         }
     }
