@@ -47,6 +47,10 @@
 
             $actionKeys = get_object_vars($actionSpecification);
 
+            if (count($actionKeys) == 0) {
+                return ' 1 ';
+            }
+
             if (count($actionKeys) != 1) {
                 new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Action specification object must contain only one key.');
             }

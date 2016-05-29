@@ -16,6 +16,12 @@
         private static $lastExecutionError = [];
 
         /**
+         * Stores the number of rows affected by the last execute method
+         * @var array
+         */
+        private static $lastAffectedRowCount = [];
+
+        /**
          * Returns an instance of the PDO object for a particular configured
          * database connection. If the connection has not yet been made it opens
          * a new connection and stores it for later reuse.
@@ -108,8 +114,10 @@
             $res = $prep->execute($parameters);
             if (!$res) {
                 static::$lastExecutionError[$connection] = $prep->errorInfo();
+                static::$lastAffectedRowCount[$connection] = NULL;
             } else {
                 static::$lastExecutionError[$connection] = NULL;
+                static::$lastAffectedRowCount[$connection] = $prep->rowCount();
             }
 
             return $res;
@@ -128,6 +136,23 @@
 
             $error = static::$lastExecutionError[$connection];
             static::$lastExecutionError[$connection] = NULL;
+            return $error;
+        }
+
+        /**
+         * Returns the affected row count after the last execute method success.
+         * This method returns NULL if there was an error or if the execute
+         * method was never ran. It can return 0 if no rows were affected.
+         * @param string $connection
+         * @return int|NULL
+         */
+        public static function getLastExecutionAffectedRownCount($connection = DEFAULT_DATABASE_CONNECTION) {
+            if (!isset(static::$lastAffectedRowCount[$connection])) {
+                static::$lastAffectedRowCount[$connection] = NULL;
+            }
+
+            $error = static::$lastAffectedRowCount[$connection];
+            static::$lastAffectedRowCount[$connection] = NULL;
             return $error;
         }
     }
