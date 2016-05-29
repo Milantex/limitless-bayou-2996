@@ -20,9 +20,7 @@
                 }
             }
 
-            $sql = 'INSERT INTO `' . $this->getMap()->getTableName() . '` ' .
-                    '(' . implode(', ', $fields) . ') ' .
-                    'VALUES (' . implode(', ', array_keys($data)) . ');';
+            $sql = 'INSERT INTO `' . $this->getMap()->getTableName() . '` (' . implode(', ', $fields) . ') VALUES (' . implode(', ', array_keys($data)) . ');';
             $res = DataBase::execute($sql, $data);
 
             if ($res) {
