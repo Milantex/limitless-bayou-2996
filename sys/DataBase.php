@@ -108,6 +108,8 @@
             $res = $prep->execute($parameters);
             if (!$res) {
                 static::$lastExecutionError[$connection] = $prep->errorInfo();
+            } else {
+                static::$lastExecutionError[$connection] = NULL;
             }
 
             return $res;
@@ -120,6 +122,10 @@
          * @return array|NULL
          */
         public static function getLastExecutionError($connection = DEFAULT_DATABASE_CONNECTION) {
+            if (!isset(static::$lastExecutionError[$connection])) {
+                static::$lastExecutionError[$connection] = NULL;
+            }
+
             $error = static::$lastExecutionError[$connection];
             static::$lastExecutionError[$connection] = NULL;
             return $error;
