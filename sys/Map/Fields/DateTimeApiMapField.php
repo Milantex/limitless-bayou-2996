@@ -89,4 +89,12 @@
                 (($this->minimum) !== NULL?' which cannot be smaller than ' . date('Y-m-d H:i:s', $this->minimum) : '') .
                 (($this->maximum !== NULL)?(($this->minimum !== NULL)?' and':' which') . ' cannot be larger than ' . date('Y-m-d H:i:s', $this->maximum) : '') . '.';
         }
+
+        /**
+         * Returns the database equivalent type name of the type of this field
+         * @return string
+         */
+        public function getDatabaseTypeEquivalent() : string {
+            return 'DATETIME';
+        }
     }

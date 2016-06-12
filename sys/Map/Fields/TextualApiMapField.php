@@ -50,4 +50,12 @@
         public function describe() : string {
             return 'This field stores a text value' . (($this->pattern !== NULL)?' which must match the following regular expression: ' . $this->pattern:'') . '.';
         }
+
+        /**
+         * Returns the database equivalent type name of the type of this field
+         * @return string
+         */
+        public function getDatabaseTypeEquivalent() : string {
+            return 'TEXT';
+        }
     }

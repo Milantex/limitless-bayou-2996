@@ -75,4 +75,12 @@
                 ' numeric value' . (($this->minimum) !== NULL?' which cannot be smaller than ' . $this->minimum : '') .
                 (($this->maximum !== NULL)?(($this->minimum !== NULL)?' and':' which') . ' cannot be larger than ' . $this->maximum : '') . '.';
         }
+
+        /**
+         * Returns the database equivalent type name of the type of this field
+         * @return string
+         */
+        public function getDatabaseTypeEquivalent() : string {
+            return 'INTEGER';
+        }
     }

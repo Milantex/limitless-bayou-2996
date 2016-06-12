@@ -41,4 +41,10 @@
          * @return string
          */
         public abstract function describe() : string;
+
+        /**
+         * Returns the database equivalent type name of the type of this field
+         * @return string
+         */
+        public abstract function getDatabaseTypeEquivalent() : string;
     }
