@@ -53,7 +53,7 @@
             }
 
             if (!is_object($actionSpecification->values)) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, "The 'values' property of the action specification object must have be an object.");
+                new ApiResponse(ApiResponse::STATUS_ERROR, "The 'values' property of the action specification object must be an object.");
             }
 
             if (!property_exists($actionSpecification, 'find')) {
