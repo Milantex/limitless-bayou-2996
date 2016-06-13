@@ -159,25 +159,24 @@
          * the full specification of the map's fields with their descriptions.
          * @return string
          */
-        public function describe() : string {
-            $documentation = '';
-            $documentation .= '<table class="map">';
-            $documentation .= '<tr>';
-            $documentation .= '<th colspan="2">' . htmlspecialchars($this->description) . '</th>';
-            $documentation .= '</tr>';
-            $documentation .= '<tr>';
-            $documentation .= '<td class="api-link" colspan="2"><a href="?map=' . htmlspecialchars($this->name) . '">?map=' . htmlspecialchars($this->name) . '</a></td>';
-            $documentation .= '</tr>';
-            $documentation .= '<tr>';
-            $documentation .= '<th colspan="2">Fields:</th>';
-            $documentation .= '</tr>';
-            foreach ($this->fields as $field) {
-                $documentation .= '<tr>';
-                $documentation .= '<th>' . htmlspecialchars($field->getName()) . '</th>';
-                $documentation .= '<td>' . htmlspecialchars($field->describe()) . '</td>';
-                $documentation .= '</tr>';
+        public function describe() : stdClass {
+            $descriptionObject = (object) [
+                'map_name' => $this->getName(),
+                'table_name' => $this->getTableName(),
+                'description' => $this->getDescription(),
+                'api_url' => '?map=' . $this->name,
+                'fields' => [ ]
+            ];
+
+            foreach ($this->fields as $key => $field) {
+                $descriptionObject->fields[] = (object) [
+                    'key' => $key,
+                    'name' => $field->getName(),
+                    'type' => $field->getDatabaseTypeEquivalent(),
+                    'description' => $field->describe()
+                ];
             }
-            $documentation .= '</table>';
-            return $documentation;
+
+            return $descriptionObject;
         }
     }
