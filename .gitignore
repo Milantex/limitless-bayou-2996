@@ -2,4 +2,4 @@
 .gitignore
 .buildpath
 .project
-settings/
+.settings/
