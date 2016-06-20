@@ -1,7 +1,6 @@
 <?php
     namespace Milantex\LimitlessBayou\Sys\Actions;
 
-    use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
     use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
     use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
 
@@ -24,11 +23,11 @@
             $actionParameters = new ActionParameters();
             $clause = $this->parseActionSpecification($actionSpecification, $actionParameters);
             $sql = 'SELECT * FROM `' . $this->getMap()->getTableName() . '` WHERE 1 AND ' . $clause . ';';
-            $result = DataBase::selectMany($sql, $actionParameters->getParameters());
+            $result = $this->getDatabase()->selectMany($sql, $actionParameters->getParameters());
             if ($result !== NULL) {
-                new ApiResponse(ApiResponse::STATUS_OK, $result);
+                $this->getApp()->respondWithOk($result);
             } else {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'API request execution error.');
+                $this->getApp()->respondWithError('API request execution error.');
             }
         }
     }

@@ -16,6 +16,7 @@ return array(
     'Milantex\\LimitlessBayou\\Sys\\Actions\\RemoveAction' => $baseDir . '/sys/actions/RemoveAction.php',
     'Milantex\\LimitlessBayou\\Sys\\ApiResponse' => $baseDir . '/sys/ApiResponse.php',
     'Milantex\\LimitlessBayou\\Sys\\DataBase' => $baseDir . '/sys/DataBase.php',
+    'Milantex\\LimitlessBayou\\Sys\\LimitlessBayou' => $baseDir . '/sys/LimitlessBayou.php',
     'Milantex\\LimitlessBayou\\Sys\\Map\\ApiMap' => $baseDir . '/sys/map/ApiMap.php',
     'Milantex\\LimitlessBayou\\Sys\\Map\\ApiMapField' => $baseDir . '/sys/map/ApiMapField.php',
     'Milantex\\LimitlessBayou\\Sys\\Map\\Fields\\DateTimeApiMapField' => $baseDir . '/sys/map/fields/DateTimeApiMapField.php',

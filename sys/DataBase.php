@@ -6,36 +6,37 @@
      */
     final class DataBase {
         /**
-         * The list of open connections to different configured databases.
-         * @var array
+         * The PDO object for the open connection
+         * @var PDO
          */
-        private static $connections = [];
+        private $connection;
 
         /**
          * Stores the error recorded after the last execute method was ran
          * @var array
          */
-        private static $lastExecutionError = [];
+        private $lastExecutionError = NULL;
 
         /**
          * Stores the number of rows affected by the last execute method
-         * @var array
+         * @var int
          */
-        private static $lastAffectedRowCount = [];
+        private $lastAffectedRowCount = 0;
 
         /**
-         * Returns an instance of the PDO object for a particular configured
-         * database connection. If the connection has not yet been made it opens
-         * a new connection and stores it for later reuse.
-         * @param string $connection The name of the connection configuration
-         * @return PDO
+         * The DataBase class constructor function
+         * @param string $dbHost
+         * @param string $dbName
+         * @param string $dbUser
+         * @param string $dbPass
+         * @return \PDO
          */
-        public static function getInstance($connection = DEFAULT_DATABASE_CONNECTION) : \PDO {
-            if (!isset(static::$connections[$connection])) {
-                static::$connections[$connection] = new \PDO(DATABASE_CONNECTIONS[$connection]['DB_CONN'], DATABASE_CONNECTIONS[$connection]['DB_USER'], DATABASE_CONNECTIONS[$connection]['DB_PASS']);
+        public function __construct(string $dbHost, string $dbName, string $dbUser, string $dbPass) {
+            try {
+                $this->connection = new \PDO('mysql:hostname=' . $dbHost . ';dbname=' . $dbName, $dbUser, $dbPass);
+            } catch (Exception $e) {
+                // TODO: Deal with this later
             }
-
-            return static::$connections[$connection];
         }
 
         /**
@@ -43,17 +44,15 @@
          * connection and can be made to fetch a single result or all results.
          * @param string $sql
          * @param array $parameters
-         * @param string $connection
          * @param bool $return_one
          * @return NULL|stdClass|array
          */
-        private static function select($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION, $return_one = TRUE) {
-            $con = static::getInstance($connection);
-            if (!$con) {
+        private function select($sql, $parameters = [], $return_one = TRUE) {
+            if (!$this->connection) {
                 return ($return_one == TRUE) ? NULL : [];
             }
 
-            $prep = $con->prepare($sql);
+            $prep = $this->connection->prepare($sql);
             if (!$prep) {
                 return ($return_one == TRUE) ? NULL : [];
             }
@@ -75,11 +74,10 @@
          * of a single record return value.
          * @param string $sql
          * @param array $parameters
-         * @param string $connection
          * @return NULL|stdClass
          */
-        public static function selectOne($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION) {
-            return static::select($sql, $parameters, $connection, TRUE);
+        public function selectOne($sql, $parameters = []) {
+            return $this->select($sql, $parameters, TRUE);
         }
 
         /**
@@ -87,11 +85,10 @@
          * of an array of records being returned.
          * @param string $sql
          * @param array $parameters
-         * @param string $connection
          * @return NULL|stdClass
          */
-        public static function selectMany($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION) {
-            return static::select($sql, $parameters, $connection, FALSE);
+        public function selectMany($sql, $parameters = []) {
+            return $this->select($sql, $parameters, FALSE);
         }
 
         /**
@@ -102,24 +99,23 @@
          * @param string $connection
          * @return type
          */
-        public static function execute($sql, $parameters = [], $connection = DEFAULT_DATABASE_CONNECTION) {
-            $con = static::getInstance($connection);
-            if (!$con) {
+        public function execute($sql, $parameters = []) {
+            if (!$this->connection) {
                 return NULL;
             }
 
-            $prep = $con->prepare($sql);
+            $prep = $this->connection->prepare($sql);
             if (!$prep) {
                 return NULL;
             }
 
             $res = $prep->execute($parameters);
             if (!$res) {
-                static::$lastExecutionError[$connection] = $prep->errorInfo();
-                static::$lastAffectedRowCount[$connection] = NULL;
+                $this->lastExecutionError = $prep->errorInfo();
+                $this->lastAffectedRowCount = NULL;
             } else {
-                static::$lastExecutionError[$connection] = NULL;
-                static::$lastAffectedRowCount[$connection] = $prep->rowCount();
+                $this->lastExecutionError = NULL;
+                $this->lastAffectedRowCount = $prep->rowCount();
             }
 
             return $res;
@@ -128,16 +124,17 @@
         /**
          * Returns the error recorded after the last execute method failure.
          * One error can be retrieved once. After it is returned, it is reset.
-         * @param string $connection
          * @return array|NULL
          */
-        public static function getLastExecutionError($connection = DEFAULT_DATABASE_CONNECTION) {
-            if (!isset(static::$lastExecutionError[$connection])) {
-                static::$lastExecutionError[$connection] = NULL;
+        public function getLastExecutionError() {
+            if (!isset($this->lastExecutionError)) {
+                $this->lastExecutionError = NULL;
             }
 
-            $error = static::$lastExecutionError[$connection];
-            static::$lastExecutionError[$connection] = NULL;
+            $error = $this->lastExecutionError;
+
+            $this->lastExecutionError = NULL;
+
             return $error;
         }
 
@@ -145,16 +142,25 @@
          * Returns the affected row count after the last execute method success.
          * This method returns NULL if there was an error or if the execute
          * method was never ran. It can return 0 if no rows were affected.
-         * @param string $connection
          * @return int|NULL
          */
-        public static function getLastExecutionAffectedRownCount($connection = DEFAULT_DATABASE_CONNECTION) {
-            if (!isset(static::$lastAffectedRowCount[$connection])) {
-                static::$lastAffectedRowCount[$connection] = NULL;
+        public function getLastExecutionAffectedRownCount() {
+            if (!isset($this->lastAffectedRowCount)) {
+                $this->lastAffectedRowCount = NULL;
             }
 
-            $error = static::$lastAffectedRowCount[$connection];
-            static::$lastAffectedRowCount[$connection] = NULL;
+            $error = $this->lastAffectedRowCount;
+
+            $this->lastAffectedRowCount = NULL;
+
             return $error;
+        }
+
+        /**
+         * Returns the last insert ID after INSERT on this connection
+         * @return int
+         */
+        public function getLastInsertId() {
+            return $this->connection->lastInsertId();
         }
     }

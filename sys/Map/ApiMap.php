@@ -1,6 +1,7 @@
 <?php
     namespace Milantex\LimitlessBayou\Sys\Map;
 
+    use \Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
     use \Milantex\LimitlessBayou\Sys\RequestHandler as RequestHandler;
     use \Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
 
@@ -9,6 +10,12 @@
      * the database with the list of its fields.
      */
     final class ApiMap {
+        /**
+         * The reference to the main LimitlessBayou application API instance
+         * @var LimitlessBayou
+         */
+        private $app;
+
         /**
          * The name of the map, as it appears in the API request.
          * The name of the map must match the regular expression defined in this
@@ -145,15 +152,25 @@
         }
 
         /**
+         * Returns the reference to the LimitlessBayou API application instance.
+         * @return LimitlessBayou
+         */
+        function getApp(): LimitlessBayou {
+            return $this->app;
+        }
+
+        /**
          * This method checks if the action specification fed to the request
          * handler is valid and if it is, executes the request handler.
          * @param stdClass $json
          */
-        public function handle(\stdClass $json) {
+        public function handle(\stdClass $json, LimitlessBayou &$app) {
+            $this->app = $app;
+
             $handler = new RequestHandler($json, $this);
 
             if (!$handler->isValid()) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'The request is not in the valid format.');
+                $this->getApp()->respondWithError('The request is not in the valid format.');
             }
 
             $handler->run();

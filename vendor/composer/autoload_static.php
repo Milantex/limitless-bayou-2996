@@ -31,6 +31,7 @@ class ComposerStaticInitbea301a33333d9bffab5c23fdc23a64d
         'Milantex\\LimitlessBayou\\Sys\\Actions\\RemoveAction' => __DIR__ . '/../..' . '/sys/actions/RemoveAction.php',
         'Milantex\\LimitlessBayou\\Sys\\ApiResponse' => __DIR__ . '/../..' . '/sys/ApiResponse.php',
         'Milantex\\LimitlessBayou\\Sys\\DataBase' => __DIR__ . '/../..' . '/sys/DataBase.php',
+        'Milantex\\LimitlessBayou\\Sys\\LimitlessBayou' => __DIR__ . '/../..' . '/sys/LimitlessBayou.php',
         'Milantex\\LimitlessBayou\\Sys\\Map\\ApiMap' => __DIR__ . '/../..' . '/sys/map/ApiMap.php',
         'Milantex\\LimitlessBayou\\Sys\\Map\\ApiMapField' => __DIR__ . '/../..' . '/sys/map/ApiMapField.php',
         'Milantex\\LimitlessBayou\\Sys\\Map\\Fields\\DateTimeApiMapField' => __DIR__ . '/../..' . '/sys/map/fields/DateTimeApiMapField.php',

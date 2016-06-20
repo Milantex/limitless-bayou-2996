@@ -1,11 +1,19 @@
 <?php
     namespace Milantex\LimitlessBayou\Sys;
 
+    use Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
+
     /**
      * The ApiResponse class is used to sent the API response instantly upon
      * creation of an ApiResponse object. Each object has an 
      */
     final class ApiResponse {
+        /**
+         * The reference to the main LimitlessBayou API application instance
+         * @var LimitlessBayou
+         */
+        private $app;
+
         /**
          * The return status of the API response.
          * Currently, only three values are possible: ok, error and information
@@ -88,12 +96,13 @@
          * @param string $status
          * @param mixed $content
          */
-        public function __construct($status = ApiResponse::STATUS_INFO, $content = []) {
+        public function __construct(LimitlessBayou &$app, $status = ApiResponse::STATUS_INFO, $content = []) {
+            $this->app = $app;
             $this->status  = $status;
             $this->content = $content;
             $this->timestampStart = REQUEST_TIME;
             $this->timestampEnd = microtime(true);
-            $this->executionDuration = $this->timestampEnd - $this->timestampStart;
+            $this->executionDuration = $this->timestampEnd - $this->app->getStartTime();
 
             if (is_object($content)) {
                 $this->type = ApiResponse::TYPE_OBJECT;

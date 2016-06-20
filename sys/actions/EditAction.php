@@ -1,9 +1,7 @@
 <?php
     namespace Milantex\LimitlessBayou\Sys\Actions;
 
-    use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
     use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
-    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
 
     /**
      * The EditAction corresponds to the edit API action. It extends the
@@ -23,9 +21,9 @@
             $uniqueIndex = 1;
             foreach (get_object_vars($actionSpecification->values) as $key => $value) {
                 if (!$this->getMap()->fieldExists($key)) {
-                    new ApiResponse(ApiResponse::STATUS_ERROR, 'The specified field:' . addslashes($key) . ' does not exist in this map.');
+                    $this->getApp()->respondWithError('The specified field:' . addslashes($key) . ' does not exist in this map.');
                 } elseif (!$this->getMap()->getField($key)->isValid($value)) {
-                    new ApiResponse(ApiResponse::STATUS_ERROR, 'The value for the field:' . addslashes($key) . ' is not valid.');
+                    $this->getApp()->respondWithError('The value for the field:' . addslashes($key) . ' is not valid.');
                 } else {
                     $fields[] = '`' . $key . '` = ' . ':update_' . $key . $uniqueIndex;
                     $data[':update_' . $key . $uniqueIndex] = $value;
@@ -34,13 +32,13 @@
             }
 
             $sql = 'UPDATE `' . $this->getMap()->getTableName() . '` SET ' . implode(', ', $fields) . ' WHERE 1 AND ' . $clause . ';';
-            $res = DataBase::execute($sql, $data);
+            $res = $this->getDatabase()->execute($sql, $data);
 
             if ($res) {
-                $rowCount = DataBase::getLastExecutionAffectedRownCount();
-                new ApiResponse(ApiResponse::STATUS_OK, $rowCount);
+                $rowCount = $this->getDatabase()->getLastExecutionAffectedRownCount();
+                $this->getApp()->respondWithOk($rowCount);
             } else {
-                new ApiResponse(ApiResponse::STATUS_ERROR, DataBase::getLastExecutionError());
+                $this->getApp()->respondWithError($this->getDatabase()->getLastExecutionError());
             }
         }
 
@@ -51,19 +49,19 @@
         private function checkActionSpecificationValidity(\stdClass $actionSpecification) {
             $vars = get_object_vars($actionSpecification);
             if (count($vars) != 2) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, "This action's action specification object must have exactly two properties.");
+                $this->getApp()->respondWithError("This action's action specification object must have exactly two properties.");
             }
 
             if (!property_exists($actionSpecification, 'values')) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, "This action's action specification object must have the 'values' property.");
+                $this->getApp()->respondWithError("This action's action specification object must have the 'values' property.");
             }
 
             if (!is_object($actionSpecification->values)) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, "The 'values' property of the action specification object must be an object.");
+                $this->getApp()->respondWithError("The 'values' property of the action specification object must be an object.");
             }
 
             if (!property_exists($actionSpecification, 'find')) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, "This action's action specification object must have the 'find' property.");
+                $this->getApp()->respondWithError("This action's action specification object must have the 'find' property.");
             }
         }
     }

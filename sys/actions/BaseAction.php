@@ -3,7 +3,9 @@
 
     use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
     use Milantex\LimitlessBayou\Sys\ActionInterface as ActionInterface;
+    use Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
     use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+    use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
     use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
 
     /**
@@ -28,7 +30,7 @@
          * be parsing the action specification for.
          * @param ApiMap $map
          */
-        final function __construct(ApiMap $map) {
+        final function __construct(ApiMap &$map) {
             $this->map = $map;
         }
 
@@ -38,6 +40,18 @@
          */
         protected function getMap() : ApiMap {
             return $this->map;
+        }
+
+        protected function getApp() : LimitlessBayou {
+            return $this->getMap()->getApp();
+        }
+
+        /**
+         * Returns an instance of the database (the connections is opened once)
+         * @return DataBase
+         */
+        protected function getDatabase() : DataBase {
+            return $this->getApp()->getDatabase();
         }
 
         /**
@@ -59,20 +73,20 @@
             }
 
             if (count($actionKeys) != 1) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Action specification object must contain only one key.');
+                $this->getApp()->respondWithError('Invalid API call. Action specification object must contain only one key.');
             }
 
             $actionKey = array_keys($actionKeys)[0];
 
             if ($actionKey === '_and') {
                 if (!is_array($actionSpecification->_and)) {
-                    new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Action key _and must be an array.');
+                    $this->getApp()->respondWithError('Invalid API call. Action key _and must be an array.');
                 }
 
                 $string .= $this->parseAndAction($actionSpecification->_and, $actionParameters);
             } else if ($actionKey === '_or') {
                 if (!is_array($actionSpecification->_or)) {
-                    new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Action key _or must be an array.');
+                    $this->getApp()->respondWithError('Invalid API call. Action key _or must be an array.');
                 }
 
                 $string .= $this->parseOrAction($actionSpecification->_or, $actionParameters);
@@ -103,13 +117,13 @@
             $operator = $this->getOperator($parameterKey);
 
             if ($operator === '') {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Invalid parameter:' . $parameterName . ' value action:' . htmlspecialchars($parameterKey)) . ' given.';
+                $this->getApp()->respondWithError('Invalid API call. Invalid parameter:' . $parameterName . ' value action:' . htmlspecialchars($parameterKey)) . ' given.';
             }
 
             $string = ' ( ' . $actionKey . ' ' . $operator;
 
             if ($operator === ' LIKE ' and !$this->modifyParameterValueForLikeOperators($parameterKey, $parameterValue)) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Invalid parameter:' . $parameterName . ' value action:' . htmlspecialchars($parameterKey)) . ' given.';
+                $this->getApp()->respondWithError('Invalid API call. Invalid parameter:' . $parameterName . ' value action:' . htmlspecialchars($parameterKey)) . ' given.';
             }
 
             $actionParameterName = $actionParameters->getNextGenericParameterName();
@@ -128,7 +142,7 @@
          */
         private function getParameterKeyNameAndValue(\stdClass &$actionSpecification, string $actionKey) {
             if (!is_object($actionSpecification->$actionKey)) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Parameter value key must be an object.');
+                $this->getApp()->respondWithError('Invalid API call. Parameter value key must be an object.');
             }
 
             $parameterValue = $actionSpecification->$actionKey;
@@ -136,7 +150,7 @@
             $parameterValueKeys = get_object_vars($parameterValue);
 
             if (count($parameterValueKeys) != 1) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. The parameter:' . $parameterName . ' value object must contain only one key.');
+                $this->getApp()->respondWithError('Invalid API call. The parameter:' . $parameterName . ' value object must contain only one key.');
             }
 
             $parameterKey = array_keys($parameterValueKeys)[0];
@@ -158,11 +172,11 @@
             $field = $this->getMap()->getField($parameterName);
 
             if ($field === NULL) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. The requested parameter:' . $parameterName . ' does not exist in this map.');
+                $this->getApp()->respondWithError('Invalid API call. The requested parameter:' . $parameterName . ' does not exist in this map.');
             }
 
             if (!$field->isValid($parameterValue->$parameterKey)) {
-                new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. The parameter:' . $parameterName . ' value is invalid.');
+                $this->getApp()->respondWithError('Invalid API call. The parameter:' . $parameterName . ' value is invalid.');
             }
         }
 
