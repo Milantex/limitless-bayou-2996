@@ -1,4 +1,8 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Map\Fields;
+
+    use Milantex\LimitlessBayou\Sys\Map\ApiMapField as ApiMapField;
+
     /**
      * This is the NUMBER field type class. It supports range validation and
      * can check if the value is positive or negative, in case the unsigned

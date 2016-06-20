@@ -1,4 +1,9 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Map;
+
+    use \Milantex\LimitlessBayou\Sys\RequestHandler as RequestHandler;
+    use \Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+
     /**
      * The ApiMap class represents a structured description of a single table in
      * the database with the list of its fields.
@@ -52,7 +57,7 @@
          */
         public function __construct(string $name, string $tableName, string $description) {
             if (!preg_match(ApiMap::MAP_NAME_PATTERN, $name)) {
-                throw new Exception("The name of the map does not match the required pattern: " . ApiMap::MAP_NAME_PATTERN . ".");
+                throw new \Exception("The name of the map does not match the required pattern: " . ApiMap::MAP_NAME_PATTERN . ".");
             }
 
             $this->name = $name;
@@ -144,7 +149,7 @@
          * handler is valid and if it is, executes the request handler.
          * @param stdClass $json
          */
-        public function handle(stdClass $json) {
+        public function handle(\stdClass $json) {
             $handler = new RequestHandler($json, $this);
 
             if (!$handler->isValid()) {
@@ -159,7 +164,7 @@
          * the full specification of the map's fields with their descriptions.
          * @return string
          */
-        public function describe() : stdClass {
+        public function describe() : \stdClass {
             $descriptionObject = (object) [
                 'map_name' => $this->getName(),
                 'table_name' => $this->getTableName(),

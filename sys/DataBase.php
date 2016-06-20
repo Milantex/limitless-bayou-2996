@@ -1,4 +1,6 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys;
+
     /**
      * The DataBase interface wrapper class
      */
@@ -28,9 +30,9 @@
          * @param string $connection The name of the connection configuration
          * @return PDO
          */
-        public static function getInstance($connection = DEFAULT_DATABASE_CONNECTION) : PDO {
+        public static function getInstance($connection = DEFAULT_DATABASE_CONNECTION) : \PDO {
             if (!isset(static::$connections[$connection])) {
-                static::$connections[$connection] = new PDO(DATABASE_CONNECTIONS[$connection]['DB_CONN'], DATABASE_CONNECTIONS[$connection]['DB_USER'], DATABASE_CONNECTIONS[$connection]['DB_PASS']);
+                static::$connections[$connection] = new \PDO(DATABASE_CONNECTIONS[$connection]['DB_CONN'], DATABASE_CONNECTIONS[$connection]['DB_USER'], DATABASE_CONNECTIONS[$connection]['DB_PASS']);
             }
 
             return static::$connections[$connection];
@@ -62,9 +64,9 @@
             }
 
             if ($return_one == TRUE) {
-                return $prep->fetch(PDO::FETCH_OBJ);
+                return $prep->fetch(\PDO::FETCH_OBJ);
             } else {
-                return $prep->fetchAll(PDO::FETCH_OBJ);
+                return $prep->fetchAll(\PDO::FETCH_OBJ);
             }
         }
 

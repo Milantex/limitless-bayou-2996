@@ -1,4 +1,10 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Actions;
+
+    use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
+    use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
+    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+
     /**
      * The FindOneAction corresponds to the findOne API action. It extends the
      * BaseAction class and inherits its ability to parse the action
@@ -14,7 +20,7 @@
          * an object and send it in an API response.
          * @param stdClass $actionSpecification
          */
-        public function handle(stdClass $actionSpecification) {
+        public function handle(\stdClass $actionSpecification) {
             $actionParameters = new ActionParameters();
             $clause = $this->parseActionSpecification($actionSpecification, $actionParameters);
             $sql = 'SELECT * FROM `' . $this->getMap()->getTableName() . '` WHERE 1 AND ' . $clause . ' LIMIT 0, 1;';

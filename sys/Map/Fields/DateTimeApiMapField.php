@@ -1,4 +1,8 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Map\Fields;
+
+    use Milantex\LimitlessBayou\Sys\Map\ApiMapField as ApiMapField;
+
     /**
      * This is the DATETIME field type class. It supports range validation.
      * Normally, the value can be any string with an ISO formatted date value.

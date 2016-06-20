@@ -1,11 +1,17 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Actions;
+
+    use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
+    use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
+    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+
     /**
      * The EditAction corresponds to the edit API action. It extends the
      * BaseAction class and inherits its ability to parse the action
      * specification object before handling it in its own specific manner.
      */
     class EditAction extends BaseAction {   
-        public function handle(stdClass $actionSpecification) {
+        public function handle(\stdClass $actionSpecification) {
             $this->checkActionSpecificationValidity($actionSpecification);
 
             $actionParameters = new ActionParameters();
@@ -42,7 +48,7 @@
          * Checks if the action specification object is of valid structure
          * @param stdClass $actionSpecification
          */
-        private function checkActionSpecificationValidity(stdClass $actionSpecification) {
+        private function checkActionSpecificationValidity(\stdClass $actionSpecification) {
             $vars = get_object_vars($actionSpecification);
             if (count($vars) != 2) {
                 new ApiResponse(ApiResponse::STATUS_ERROR, "This action's action specification object must have exactly two properties.");

@@ -1,4 +1,6 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys;
+
     /**
      * The ApiResponse class is used to sent the API response instantly upon
      * creation of an ApiResponse object. Each object has an 

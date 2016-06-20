@@ -1,4 +1,9 @@
 <?php
+    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
+    use Milantex\LimitlessBayou\Sys\Map\Fields\DateTimeApiMapField as DateTimeApiMapField;
+    use Milantex\LimitlessBayou\Sys\Map\Fields\NumericApiMapField as NumericApiMapField;
+    use Milantex\LimitlessBayou\Sys\Map\Fields\TextualApiMapField as TextualApiMapField;
+
     $map = new ApiMap('blog.user', 'user', 'Blog users');
 
     $map->addField('user_id', new NumericApiMapField('User ID', TRUE, 1));

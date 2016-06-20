@@ -1,4 +1,7 @@
 <?php
+    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
+    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+
     require_once './sys/BayouCore.php';
 
     define('REQUEST_TIME', microtime(true));

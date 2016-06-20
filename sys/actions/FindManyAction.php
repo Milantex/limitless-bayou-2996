@@ -1,4 +1,10 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Actions;
+
+    use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
+    use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
+    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+
     /**
      * The FindManyAction corresponds to the findMany API action. It extends the
      * BaseAction class and inherits its ability to parse the action
@@ -14,7 +20,7 @@
          * an array of results and send them in an API response.
          * @param stdClass $actionSpecification
          */
-        public function handle(stdClass $actionSpecification) {
+        public function handle(\stdClass $actionSpecification) {
             $actionParameters = new ActionParameters();
             $clause = $this->parseActionSpecification($actionSpecification, $actionParameters);
             $sql = 'SELECT * FROM `' . $this->getMap()->getTableName() . '` WHERE 1 AND ' . $clause . ';';

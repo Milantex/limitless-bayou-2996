@@ -1,4 +1,11 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Actions;
+
+    use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
+    use Milantex\LimitlessBayou\Sys\ActionInterface as ActionInterface;
+    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
+
     /**
      * The BaseAction class, which implements the ActionInterface implements
      * a number of method to be shared by specific action classes which extend
@@ -42,7 +49,7 @@
          * @param ActionParameters $actionParameters The action parameters
          * @return string The part of the SQL query made for this specification
          */
-        protected function parseActionSpecification(stdClass &$actionSpecification, ActionParameters &$actionParameters) {
+        protected function parseActionSpecification(\stdClass &$actionSpecification, ActionParameters &$actionParameters) {
             $string = '';
 
             $actionKeys = get_object_vars($actionSpecification);
@@ -88,7 +95,7 @@
          * @param ActionParameters $actionParameters
          * @return string
          */
-        private function parseParameterValue(stdClass &$actionSpecification, string $actionKey, ActionParameters &$actionParameters) {
+        private function parseParameterValue(\stdClass &$actionSpecification, string $actionKey, ActionParameters &$actionParameters) {
             $keyNameValue = $this->getParameterKeyNameAndValue($actionSpecification, $actionKey);
             $this->checkParameterValidity($keyNameValue);
             list($parameterKey, $parameterName, $parameterValue) = $keyNameValue;
@@ -119,7 +126,7 @@
          * @param string $actionKey
          * @return array
          */
-        private function getParameterKeyNameAndValue(stdClass &$actionSpecification, string $actionKey) {
+        private function getParameterKeyNameAndValue(\stdClass &$actionSpecification, string $actionKey) {
             if (!is_object($actionSpecification->$actionKey)) {
                 new ApiResponse(ApiResponse::STATUS_ERROR, 'Invalid API call. Parameter value key must be an object.');
             }
@@ -192,7 +199,7 @@
          * @param stdClass $parameterValue
          * @return boolean
          */
-        private function modifyParameterValueForLikeOperators(string $parameterKey, stdClass &$parameterValue) {
+        private function modifyParameterValueForLikeOperators(string $parameterKey, \stdClass &$parameterValue) {
             if ($parameterKey === '_begins') {
                 $parameterValue->$parameterKey .= '%';
             } else if ($parameterKey === '_ends') {
@@ -207,7 +214,7 @@
         }
 
         /**
-         * If the action specification's key was the _and operation, this method
+         * If the action specification key was the _and operation, this method
          * parses all elements of its value (an array) and parses them each as
          * a separate action specification option and joins the resulting SQL
          * strings with an AND keyword. It also passes the list of action
@@ -227,7 +234,7 @@
         }
 
         /**
-         * If the action specification's key was the _or operation, this method
+         * If the action specification key was the _or operation, this method
          * parses all elements of its value (an array) and parses them each as
          * a separate action specification option and joins the resulting SQL
          * strings with an OR keyword. It also passes the list of action
@@ -247,5 +254,5 @@
          * This method will be used to handle the action specification object.
          * Each action class should implement its own version of this method.
          */
-        public abstract function handle(stdClass $actionSpecification);
+        public abstract function handle(\stdClass $actionSpecification);
     }

@@ -1,4 +1,8 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Map\Fields;
+
+    use Milantex\LimitlessBayou\Sys\Map\ApiMapField as ApiMapField;
+
     /**
      * This is the TEXT field type class. It implements value validation with
      * the help of regular expression matching. By default, any sequence of

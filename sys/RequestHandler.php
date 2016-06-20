@@ -1,4 +1,8 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys;
+
+    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
+
     /**
      * The RequestHandler class initiates parsing of the action specification
      * sent in the API request. It identifies the requested action and delegates
@@ -41,11 +45,11 @@
          * An array of all available actions
          */
         const ACTIONS = [
-            RequestHandler::ACTION_FIND_ONE   => 'FindOneAction',
-            RequestHandler::ACTION_FIND_MANY  => 'FindManyAction',
-            RequestHandler::ACTION_ADD        => 'AddAction',
-            RequestHandler::ACTION_EDIT       => 'EditAction',
-            RequestHandler::ACTION_REMOVE     => 'RemoveAction'
+            RequestHandler::ACTION_FIND_ONE   => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\FindOneAction',
+            RequestHandler::ACTION_FIND_MANY  => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\FindManyAction',
+            RequestHandler::ACTION_ADD        => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\AddAction',
+            RequestHandler::ACTION_EDIT       => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\EditAction',
+            RequestHandler::ACTION_REMOVE     => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\RemoveAction'
         ];
 
         /**
@@ -73,7 +77,7 @@
          * @param stdClass $request
          * @param ApiMap $map
          */
-        public function __construct(stdClass $request, ApiMap $map) {
+        public function __construct(\stdClass $request, ApiMap $map) {
             $this->request = $request;
             $this->map = $map;
             $this->parse();

@@ -1,4 +1,6 @@
 <?php
+    namespace Milantex\LimitlessBayou\Sys\Map;
+
     /**
      * This is the base class for all API map field types.
      * Specific field types should be defined by extending this base class.
