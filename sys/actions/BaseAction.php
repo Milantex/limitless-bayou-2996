@@ -4,7 +4,6 @@
     use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
     use Milantex\LimitlessBayou\Sys\ActionInterface as ActionInterface;
     use Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
-    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
     use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
     use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
 
@@ -42,6 +41,10 @@
             return $this->map;
         }
 
+        /**
+         * Returns the reference to the LimitlessBayou API application instance
+         * @return LimitlessBayou
+         */
         protected function getApp() : LimitlessBayou {
             return $this->getMap()->getApp();
         }

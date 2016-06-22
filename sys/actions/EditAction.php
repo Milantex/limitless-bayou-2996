@@ -8,7 +8,11 @@
      * BaseAction class and inherits its ability to parse the action
      * specification object before handling it in its own specific manner.
      */
-    class EditAction extends BaseAction {   
+    class EditAction extends BaseAction {
+        /**
+         * Handles the action specification to edit records in the mapped table
+         * @param \stdClass $actionSpecification
+         */
         public function handle(\stdClass $actionSpecification) {
             $this->checkActionSpecificationValidity($actionSpecification);
 

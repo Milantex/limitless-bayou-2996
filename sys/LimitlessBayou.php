@@ -5,9 +5,44 @@
     use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
     use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
 
+    /**
+     * The main logic of the LimitlessBayou application is located in this class
+     */
     final class LimitlessBayou {
-        private $dbHost, $dbName, $dbUser, $dbPass;
+        /**
+         * The database host name
+         * @var string
+         */
+        private $dbHost;
+
+        /**
+         * The name of the database whose tables are mapped by the API maps
+         * @var string
+         */
+        private $dbName;
+
+        /**
+         * The username to use when connecting to the database
+         * @var stirng
+         */
+        private $dbUser;
+
+        /**
+         * The password of the specified database user
+         * @var string
+         */
+        private $dbPass;
+
+        /**
+         * The path where the application stores API map files .map.php
+         * @var string
+         */
         private $mapsPath;
+
+        /**
+         * The time when the application starts
+         * @var int
+         */
         private $startTime;
 
         /**
@@ -16,22 +51,42 @@
          */
         private $database = NULL;
 
+        /**
+         * Returns the database host name
+         * @return string
+         */
         function getDbHost() {
             return $this->dbHost;
         }
 
+        /**
+         * Returns the database name
+         * @return string
+         */
         function getDbName() {
             return $this->dbName;
         }
 
+        /**
+         * Returns the database user
+         * @return string
+         */
         function getDbUser() {
             return $this->dbUser;
         }
 
+        /**
+         * Returns the database user's password
+         * @return string
+         */
         function getDbPass() {
             return $this->dbPass;
         }
 
+        /**
+         * Returns the time when the request handling had begun
+         * @return int
+         */
         function getStartTime() {
             return $this->startTime;
         }
@@ -48,6 +103,16 @@
             return $this->database;
         }
 
+        /**
+         * The LimitIterator application constructor.
+         * This constructor takes the connection parameters for the database and
+         * the path to the directory where API map files (.map.php) are stored.
+         * @param string $dbHost
+         * @param string $dbName
+         * @param string $dbUser
+         * @param string $dbPass
+         * @param string $mapsPath
+         */
         public function __construct(string $dbHost, string $dbName, string $dbUser, string $dbPass, string $mapsPath) {
             $this->dbHost = $dbHost;
             $this->dbName = $dbName;
@@ -67,6 +132,9 @@
             $this->database = NULL;
         }
 
+        /**
+         * Begin handling the received request from the client
+         */
         public function start() {
             $this->startTime = microtime(true);
 
@@ -91,6 +159,10 @@
             }
         }
 
+        /**
+         * Retrieve the name of the requested map from the clients API request
+         * @return string
+         */
         private function getMapName() : string {
             $mapName = filter_input(INPUT_GET, 'map', FILTER_SANITIZE_STRING);
 
@@ -101,6 +173,11 @@
             return $mapName;
         }
 
+        /**
+         * Check if the requested map file exists. If it does, return its path.
+         * @param string $mapName
+         * @return string
+         */
         private function getMapPathIfValid($mapName) {
 
             $mapPath = $this->mapsPath . '/' . $mapName . '.map.php';
@@ -111,14 +188,26 @@
             return $mapPath;
         }
 
+        /**
+         * Send an API response with the status 'error'
+         * @param mixed $content
+         */
         public function respondWithError($content = []) {
             new ApiResponse($this, ApiResponse::STATUS_ERROR, $content);
         }
 
+        /**
+         * Send an API response with the status 'ok'
+         * @param mixed $content
+         */
         public function respondWithOk($content = []) {
             new ApiResponse($this, ApiResponse::STATUS_OK, $content);
         }
 
+        /**
+         * Send an API response with the status 'info'
+         * @param mixed $content
+         */
         public function respondWithInfo($content = []) {
             new ApiResponse($this, ApiResponse::STATUS_INFO, $content);
         }

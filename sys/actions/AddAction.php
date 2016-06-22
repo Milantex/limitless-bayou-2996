@@ -6,7 +6,11 @@
      * BaseAction class and inherits its ability to parse the action
      * specification object before handling it in its own specific manner.
      */
-    class AddAction extends BaseAction {   
+    class AddAction extends BaseAction {
+        /**
+         * Handles the action specification to add a record to the mapped table
+         * @param \stdClass $actionSpecification
+         */
         public function handle(\stdClass $actionSpecification) {
             $data = [];
             $fields = [];
