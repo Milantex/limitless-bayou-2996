@@ -1,7 +1,7 @@
 {
     "name" : "milantex/limitless-bayou",
     "description" : "Quickly create an API for an existing relational database with field validation.",
-    "type" : "project",
+    "type" : "library",
     "license" : "AGPL-3.0",
     "minimum-stability" : "dev",
     "authors" : [
