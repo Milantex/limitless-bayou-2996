@@ -100,7 +100,7 @@
             $this->app = $app;
             $this->status  = $status;
             $this->content = $content;
-            $this->timestampStart = REQUEST_TIME;
+            $this->timestampStart = $this->app->getStartTime();
             $this->timestampEnd = microtime(true);
             $this->executionDuration = $this->timestampEnd - $this->app->getStartTime();
 
