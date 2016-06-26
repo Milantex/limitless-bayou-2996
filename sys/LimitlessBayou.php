@@ -119,6 +119,7 @@
             $this->dbUser = $dbUser;
             $this->dbPass = $dbPass;
             $this->mapsPath = $mapsPath;
+            $this->startTime = microtime(true);
 
             if (!file_exists($mapsPath) or !is_dir($mapsPath)) {
                 $this->respondWithError('Service missconfigured. The map directory does not exist or is not a directory.');
