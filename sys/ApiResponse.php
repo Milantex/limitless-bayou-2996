@@ -107,7 +107,6 @@
             $this->status  = $status;
             $this->content = $content;
             $this->timestampStart = $this->app->getStartTime();
-            $this->executionDuration = $this->timestampEnd - $this->app->getStartTime();
 
             if (is_object($content)) {
                 $this->type = ApiResponse::TYPE_OBJECT;
@@ -127,6 +126,7 @@
          */
         function getOutput() {
             $this->timestampEnd = microtime(true);
+            $this->executionDuration = $this->timestampEnd - $this->app->getStartTime();
 
             $this->output = json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
