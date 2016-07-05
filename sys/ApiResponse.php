@@ -107,7 +107,6 @@
             $this->status  = $status;
             $this->content = $content;
             $this->timestampStart = $this->app->getStartTime();
-            $this->timestampEnd = microtime(true);
             $this->executionDuration = $this->timestampEnd - $this->app->getStartTime();
 
             if (is_object($content)) {
@@ -120,8 +119,6 @@
                 $this->type = ApiResponse::TYPE_STRING;
                 $this->content = strval($content);
             }
-
-            $this->output = json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
 
         /**
@@ -129,6 +126,10 @@
          * @return string
          */
         function getOutput() {
+            $this->timestampEnd = microtime(true);
+
+            $this->output = json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
             return $this->output;
         }
 
@@ -137,7 +138,7 @@
          */
         public function send() {
             $this->sendHeaders();
-            echo $this->output;
+            echo $this->getOutput();
             exit;
         }
 
