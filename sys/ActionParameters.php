@@ -1,5 +1,5 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys;
+    namespace Milantex\LimitlessBayou;
 
     /**
      * The ActionParameter class stores the list of parameters used in the SQL

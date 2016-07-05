@@ -1,7 +1,7 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys\Actions;
+    namespace Milantex\LimitlessBayou\Actions;
 
-    use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
+    use Milantex\LimitlessBayou\ActionParameters as ActionParameters;
 
     /**
      * The FindOneAction corresponds to the findOne API action. It extends the

@@ -1,7 +1,7 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys;
+    namespace Milantex\LimitlessBayou;
 
-    use Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
+    use Milantex\LimitlessBayou\LimitlessBayou as LimitlessBayou;
 
     /**
      * The ApiResponse class is used to sent the API response instantly upon

@@ -1,5 +1,5 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys;
+    namespace Milantex\LimitlessBayou;
 
     /**
      * The ActionInterface specifies that all action classes must implement

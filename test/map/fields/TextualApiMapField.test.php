@@ -1,5 +1,5 @@
 <?php
-    use Milantex\LimitlessBayou\Sys\Map\Fields\TextualApiMapField;
+    use Milantex\LimitlessBayou\Map\Fields\TextualApiMapField;
 
     class TextualApiMapFieldTest extends PHPUnit_Framework_TestCase {
         private $field;
@@ -9,7 +9,7 @@
         }
 
         public function testConstructor() {
-            $this->assertInstanceOf('\\Milantex\\LimitlessBayou\\Sys\\Map\\Fields\\TextualApiMapField', $this->field);
+            $this->assertInstanceOf('\\Milantex\\LimitlessBayou\\Map\\Fields\\TextualApiMapField', $this->field);
         }
 
         public function testIsValid() {

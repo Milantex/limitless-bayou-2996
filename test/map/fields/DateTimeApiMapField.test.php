@@ -1,5 +1,5 @@
 <?php
-    use Milantex\LimitlessBayou\Sys\Map\Fields\DateTimeApiMapField;
+    use Milantex\LimitlessBayou\Map\Fields\DateTimeApiMapField;
 
     class DateTimeApiMapFieldTest extends PHPUnit_Framework_TestCase {
         private $field;
@@ -9,7 +9,7 @@
         }
 
         public function testConstructor() {
-            $this->assertInstanceOf('\\Milantex\\LimitlessBayou\\Sys\\Map\\Fields\\DateTimeApiMapField', $this->field);
+            $this->assertInstanceOf('\\Milantex\\LimitlessBayou\\Map\\Fields\\DateTimeApiMapField', $this->field);
         }
 
         public function testIsValid() {

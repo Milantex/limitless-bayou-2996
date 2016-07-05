@@ -1,9 +1,9 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys\Map;
+    namespace Milantex\LimitlessBayou\Map;
 
-    use \Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
-    use \Milantex\LimitlessBayou\Sys\RequestHandler as RequestHandler;
-    use \Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+    use \Milantex\LimitlessBayou\LimitlessBayou as LimitlessBayou;
+    use \Milantex\LimitlessBayou\RequestHandler as RequestHandler;
+    use \Milantex\LimitlessBayou\ApiResponse as ApiResponse;
 
     /**
      * The ApiMap class represents a structured description of a single table in

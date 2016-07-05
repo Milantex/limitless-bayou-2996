@@ -1,11 +1,11 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys\Actions;
+    namespace Milantex\LimitlessBayou\Actions;
 
-    use Milantex\LimitlessBayou\Sys\ActionParameters as ActionParameters;
-    use Milantex\LimitlessBayou\Sys\ActionInterface as ActionInterface;
-    use Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
+    use Milantex\LimitlessBayou\ActionParameters as ActionParameters;
+    use Milantex\LimitlessBayou\ActionInterface as ActionInterface;
+    use Milantex\LimitlessBayou\LimitlessBayou as LimitlessBayou;
     use Milantex\DAW\DataBase as DataBase;
-    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
+    use Milantex\LimitlessBayou\Map\ApiMap as ApiMap;
 
     /**
      * The BaseAction class, which implements the ActionInterface implements

@@ -1,5 +1,5 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys\Actions;
+    namespace Milantex\LimitlessBayou\Actions;
 
     /**
      * The AddAction corresponds to the add API action. It extends the

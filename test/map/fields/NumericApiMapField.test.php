@@ -1,5 +1,5 @@
 <?php
-    use Milantex\LimitlessBayou\Sys\Map\Fields\NumericApiMapField;
+    use Milantex\LimitlessBayou\Map\Fields\NumericApiMapField;
 
     class NumericApiMapFieldTest extends PHPUnit_Framework_TestCase {
         private $field;
@@ -9,7 +9,7 @@
         }
 
         public function testConstructor() {
-            $this->assertInstanceOf('\\Milantex\\LimitlessBayou\\Sys\\Map\\Fields\\NumericApiMapField', $this->field);
+            $this->assertInstanceOf('\\Milantex\\LimitlessBayou\\Map\\Fields\\NumericApiMapField', $this->field);
         }
 
         public function testIsValid() {

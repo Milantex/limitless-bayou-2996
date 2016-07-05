@@ -1,7 +1,7 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys\Map\Fields;
+    namespace Milantex\LimitlessBayou\Map\Fields;
 
-    use Milantex\LimitlessBayou\Sys\Map\ApiMapField as ApiMapField;
+    use Milantex\LimitlessBayou\Map\ApiMapField as ApiMapField;
 
     /**
      * This is the DATETIME field type class. It supports range validation.

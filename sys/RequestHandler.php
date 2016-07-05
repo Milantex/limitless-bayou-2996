@@ -1,7 +1,7 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys;
+    namespace Milantex\LimitlessBayou;
 
-    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
+    use Milantex\LimitlessBayou\Map\ApiMap as ApiMap;
 
     /**
      * The RequestHandler class initiates parsing of the action specification
@@ -45,11 +45,11 @@
          * An array of all available actions
          */
         const ACTIONS = [
-            RequestHandler::ACTION_FIND_ONE   => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\FindOneAction',
-            RequestHandler::ACTION_FIND_MANY  => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\FindManyAction',
-            RequestHandler::ACTION_ADD        => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\AddAction',
-            RequestHandler::ACTION_EDIT       => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\EditAction',
-            RequestHandler::ACTION_REMOVE     => '\\Milantex\\LimitlessBayou\\Sys\\Actions\\RemoveAction'
+            RequestHandler::ACTION_FIND_ONE   => '\\Milantex\\LimitlessBayou\\Actions\\FindOneAction',
+            RequestHandler::ACTION_FIND_MANY  => '\\Milantex\\LimitlessBayou\\Actions\\FindManyAction',
+            RequestHandler::ACTION_ADD        => '\\Milantex\\LimitlessBayou\\Actions\\AddAction',
+            RequestHandler::ACTION_EDIT       => '\\Milantex\\LimitlessBayou\\Actions\\EditAction',
+            RequestHandler::ACTION_REMOVE     => '\\Milantex\\LimitlessBayou\\Actions\\RemoveAction'
         ];
 
         /**

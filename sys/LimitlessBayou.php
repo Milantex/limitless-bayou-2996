@@ -1,8 +1,8 @@
 <?php
-    namespace Milantex\LimitlessBayou\Sys;
+    namespace Milantex\LimitlessBayou;
 
-    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
-    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+    use Milantex\LimitlessBayou\Map\ApiMap as ApiMap;
+    use Milantex\LimitlessBayou\ApiResponse as ApiResponse;
     use Milantex\DAW\DataBase as DataBase;
 
     /**

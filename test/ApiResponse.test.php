@@ -1,8 +1,13 @@
 <?php
-    use Milantex\LimitlessBayou\Sys\LimitlessBayou as LimitlessBayou;
-    use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
+    use Milantex\LimitlessBayou\LimitlessBayou as LimitlessBayou;
+    use Milantex\LimitlessBayou\ApiResponse as ApiResponse;
     
     class ApiResponsetTest extends PHPUnit_Framework_TestCase {
+        public function setUp() {
+            $this->markTestSkipped(
+                'This test does not need to be ran. It is safe to skip it.'
+            );
+        }
         /**
          * @runInSeparateProcess
          */

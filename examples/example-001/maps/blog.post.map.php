@@ -1,8 +1,8 @@
 <?php
-    use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
-    use Milantex\LimitlessBayou\Sys\Map\Fields\DateTimeApiMapField as DateTimeApiMapField;
-    use Milantex\LimitlessBayou\Sys\Map\Fields\NumericApiMapField as NumericApiMapField;
-    use Milantex\LimitlessBayou\Sys\Map\Fields\TextualApiMapField as TextualApiMapField;
+    use Milantex\LimitlessBayou\Map\ApiMap as ApiMap;
+    use Milantex\LimitlessBayou\Map\Fields\DateTimeApiMapField as DateTimeApiMapField;
+    use Milantex\LimitlessBayou\Map\Fields\NumericApiMapField as NumericApiMapField;
+    use Milantex\LimitlessBayou\Map\Fields\TextualApiMapField as TextualApiMapField;
 
     $map = new ApiMap('blog.post', 'post', 'Blog posts');
 

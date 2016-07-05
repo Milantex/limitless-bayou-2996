@@ -1,7 +1,7 @@
 <?php
     class ActionParametersTest extends PHPUnit_Framework_TestCase {
         public function testGetNextGenericParameterName() {
-            $actionParameters = new \Milantex\LimitlessBayou\Sys\ActionParameters();
+            $actionParameters = new \Milantex\LimitlessBayou\ActionParameters();
 
             $expectedNames = [
                 ':gparam_1',
@@ -36,7 +36,7 @@
         }
 
         public function testAddParameter() {
-            $actionParameters = new \Milantex\LimitlessBayou\Sys\ActionParameters();
+            $actionParameters = new \Milantex\LimitlessBayou\ActionParameters();
 
             $values = [
                 'Param1' => 'Value 1',
@@ -54,7 +54,7 @@
         }
 
         public function testGetParameterNames() {
-            $actionParameters = new \Milantex\LimitlessBayou\Sys\ActionParameters();
+            $actionParameters = new \Milantex\LimitlessBayou\ActionParameters();
 
             $keys = [':gparam_1', 'Test', 'print'];
 
@@ -66,7 +66,7 @@
         }
 
         public function testGetParameters() {
-            $actionParameters = new \Milantex\LimitlessBayou\Sys\ActionParameters();
+            $actionParameters = new \Milantex\LimitlessBayou\ActionParameters();
 
             $values = [
                 'Param1' => 'Value 1',
