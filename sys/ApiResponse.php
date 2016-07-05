@@ -52,6 +52,12 @@
          */
         public $content;
 
+        /*
+         * The output that will be sent in the API response
+         * @var string
+         */
+        public $output;
+
         /**
          * API response status used when everything was all right
          */
@@ -115,8 +121,23 @@
                 $this->content = strval($content);
             }
 
+            $this->output = json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        }
+
+        /**
+         * Returns the output string which will be sent as the API response
+         * @return string
+         */
+        function getOutput() {
+            return $this->output;
+        }
+
+        /**
+         * Send the API prepared response
+         */
+        public function send() {
             $this->sendHeaders();
-            echo json_encode($this, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            echo $this->output;
             exit;
         }
 

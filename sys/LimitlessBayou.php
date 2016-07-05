@@ -194,7 +194,7 @@
          * @param mixed $content
          */
         public function respondWithError($content = []) {
-            new ApiResponse($this, ApiResponse::STATUS_ERROR, $content);
+            (new ApiResponse($this, ApiResponse::STATUS_ERROR, $content))->send();
         }
 
         /**
@@ -202,7 +202,7 @@
          * @param mixed $content
          */
         public function respondWithOk($content = []) {
-            new ApiResponse($this, ApiResponse::STATUS_OK, $content);
+            (new ApiResponse($this, ApiResponse::STATUS_OK, $content))->send();
         }
 
         /**
@@ -210,6 +210,6 @@
          * @param mixed $content
          */
         public function respondWithInfo($content = []) {
-            new ApiResponse($this, ApiResponse::STATUS_INFO, $content);
+            (new ApiResponse($this, ApiResponse::STATUS_INFO, $content))->send();
         }
     }
