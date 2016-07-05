@@ -16,7 +16,7 @@
         }
 
         public function testAddParameterWithNextGenericName() {
-            $actionParameters = new \Milantex\LimitlessBayou\Sys\ActionParameters();
+            $actionParameters = new \Milantex\LimitlessBayou\ActionParameters();
 
             $values = [
                 'Milan Tair',
