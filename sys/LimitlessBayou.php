@@ -3,7 +3,7 @@
 
     use Milantex\LimitlessBayou\Sys\Map\ApiMap as ApiMap;
     use Milantex\LimitlessBayou\Sys\ApiResponse as ApiResponse;
-    use Milantex\LimitlessBayou\Sys\DataBase as DataBase;
+    use Milantex\DAW\DataBase as DataBase;
 
     /**
      * The main logic of the LimitlessBayou application is located in this class
