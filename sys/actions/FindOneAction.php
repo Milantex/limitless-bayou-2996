@@ -23,10 +23,12 @@
             $clause = $this->parseActionSpecification($actionSpecification, $actionParameters);
             $sql = 'SELECT * FROM `' . $this->getMap()->getTableName() . '` WHERE 1 AND ' . $clause . ' LIMIT 0, 1;';
             $result = $this->getDatabase()->selectOne($sql, $actionParameters->getParameters());
+
             if ($result !== NULL) {
                 $this->getApp()->respondWithOk($result);
-            } else {
-                $this->getApp()->respondWithError('API request execution error.');
+                return;
             }
+
+            $this->getApp()->respondWithError('API request execution error.');
         }
     }

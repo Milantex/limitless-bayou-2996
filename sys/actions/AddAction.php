@@ -18,12 +18,16 @@
             foreach (get_object_vars($actionSpecification) as $key => $value) {
                 if (!$this->getMap()->fieldExists($key)) {
                     $this->getApp()->respondWithError('The specified field:' . addslashes($key) . ' does not exist in this map.');
-                } elseif (!$this->getMap()->getField($key)->isValid($value)) {
-                    $this->getApp()->respondWithError('The value for the field:' . addslashes($key) . ' is not valid.');
-                } else {
-                    $fields[] = '`' . $key . '`';
-                    $data[':' . $key] = $value;
+                    continue;
                 }
+
+                if (!$this->getMap()->getField($key)->isValid($value)) {
+                    $this->getApp()->respondWithError('The value for the field:' . addslashes($key) . ' is not valid.');
+                    continue;
+                }
+                
+                $fields[] = '`' . $key . '`';
+                $data[':' . $key] = $value;
             }
 
             $sql = 'INSERT INTO `' . $this->getMap()->getTableName() . '` (' . implode(', ', $fields) . ') VALUES (' . implode(', ', array_keys($data)) . ');';
@@ -32,8 +36,9 @@
             if ($res) {
                 $recordId = $this->getDatabase()->getLastInsertId();
                 $this->getApp()->respondWithOk($recordId);
-            } else {
-                $this->getApp()->respondWithError($this->getDatabase()->getLastExecutionError());
+                return;
             }
+
+            $this->getApp()->respondWithError($this->getDatabase()->getLastExecutionError());
         }
     }

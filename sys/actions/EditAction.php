@@ -26,13 +26,17 @@
             foreach (get_object_vars($actionSpecification->values) as $key => $value) {
                 if (!$this->getMap()->fieldExists($key)) {
                     $this->getApp()->respondWithError('The specified field:' . addslashes($key) . ' does not exist in this map.');
-                } elseif (!$this->getMap()->getField($key)->isValid($value)) {
-                    $this->getApp()->respondWithError('The value for the field:' . addslashes($key) . ' is not valid.');
-                } else {
-                    $fields[] = '`' . $key . '` = ' . ':update_' . $key . $uniqueIndex;
-                    $data[':update_' . $key . $uniqueIndex] = $value;
-                    $uniqueIndex++;
+                    continue;
                 }
+                
+                if (!$this->getMap()->getField($key)->isValid($value)) {
+                    $this->getApp()->respondWithError('The value for the field:' . addslashes($key) . ' is not valid.');
+                    continue;
+                }
+
+                $fields[] = '`' . $key . '` = ' . ':update_' . $key . $uniqueIndex;
+                $data[':update_' . $key . $uniqueIndex] = $value;
+                $uniqueIndex++;
             }
 
             $sql = 'UPDATE `' . $this->getMap()->getTableName() . '` SET ' . implode(', ', $fields) . ' WHERE 1 AND ' . $clause . ';';
@@ -41,9 +45,10 @@
             if ($res) {
                 $rowCount = $this->getDatabase()->getLastExecutionAffectedRownCount();
                 $this->getApp()->respondWithOk($rowCount);
-            } else {
-                $this->getApp()->respondWithError($this->getDatabase()->getLastExecutionError());
+                return;
             }
+
+            $this->getApp()->respondWithError($this->getDatabase()->getLastExecutionError());
         }
 
         /**

@@ -155,9 +155,11 @@
                 }
 
                 $map->handle($json, $this);
-            } else {
-                $this->respondWithInfo($map->describe());
+
+                return;
             }
+
+            $this->respondWithInfo($map->describe());
         }
 
         /**

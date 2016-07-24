@@ -86,18 +86,18 @@
                     $this->getApp()->respondWithError('Invalid API call. Action key _and must be an array.');
                 }
 
-                $string .= $this->parseAndAction($actionSpecification->_and, $actionParameters);
-            } else if ($actionKey === '_or') {
+                return $string . $this->parseAndAction($actionSpecification->_and, $actionParameters);
+            }
+            
+            if ($actionKey === '_or') {
                 if (!is_array($actionSpecification->_or)) {
                     $this->getApp()->respondWithError('Invalid API call. Action key _or must be an array.');
                 }
 
-                $string .= $this->parseOrAction($actionSpecification->_or, $actionParameters);
-            } else {
-                $string .= $this->parseParameterValue($actionSpecification, $actionKey, $actionParameters);
+                return $string . $this->parseOrAction($actionSpecification->_or, $actionParameters);
             }
-
-            return $string;
+            
+            return $string . $this->parseParameterValue($actionSpecification, $actionKey, $actionParameters);
         }
 
         /**
@@ -167,10 +167,10 @@
          * currently used API map and if it does, if it is valid.
          * The method does not return a value, but instead sends out an error
          * response form the API.
-         * @param array $parameterKeyNameValue
+         * @param array $keyNameValue
          */
-        private function checkParameterValidity(array &$parameterKeyNameValue) {
-            list($parameterKey, $parameterName, $parameterValue) = $parameterKeyNameValue;
+        private function checkParameterValidity(array &$keyNameValue) {
+            list($parameterKey, $parameterName, $parameterValue) = $keyNameValue;
 
             $field = $this->getMap()->getField($parameterName);
 
@@ -219,15 +219,20 @@
         private function modifyParameterValueForLikeOperators(string $parameterKey, \stdClass &$parameterValue) {
             if ($parameterKey === '_begins') {
                 $parameterValue->$parameterKey .= '%';
-            } else if ($parameterKey === '_ends') {
+                return true;
+            }
+            
+            if ($parameterKey === '_ends') {
                 $parameterValue->$parameterKey = '%' . $parameterValue->$parameterKey;
-            } else if ($parameterKey === '_contains') {
+                return true;
+            }
+            
+            if ($parameterKey === '_contains') {
                 $parameterValue->$parameterKey = '%' . $parameterValue->$parameterKey . '%';
-            } else {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         /**

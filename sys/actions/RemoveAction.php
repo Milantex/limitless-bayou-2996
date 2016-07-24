@@ -26,9 +26,10 @@
             if ($res) {
                 $rowCount = $this->getDatabase()->getLastExecutionAffectedRownCount();
                 $this->getApp()->respondWithOk($rowCount);
-            } else {
-                $this->getApp()->respondWithError($this->getDatabase()->getLastExecutionError());
+                return;
             }
+
+            $this->getApp()->respondWithError($this->getDatabase()->getLastExecutionError());
         }
 
         /**

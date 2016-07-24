@@ -41,9 +41,9 @@
 
             if ($this->pattern !== NULL) {
                 return boolval(preg_match($this->pattern, $value));
-            } else {
-                return TRUE;
             }
+
+            return TRUE;
         }
 
         /**

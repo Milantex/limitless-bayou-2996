@@ -110,14 +110,21 @@
 
             if (is_object($content)) {
                 $this->type = ApiResponse::TYPE_OBJECT;
-            } elseif (is_array($content)) {
-                $this->type = ApiResponse::TYPE_ARRAY;
-            } elseif (is_numeric($content)) {
-                $this->type = ApiResponse::TYPE_NUMBER;
-            } else {
-                $this->type = ApiResponse::TYPE_STRING;
-                $this->content = strval($content);
+                return;
             }
+            
+            if (is_array($content)) {
+                $this->type = ApiResponse::TYPE_ARRAY;
+                return;
+            }
+            
+            if (is_numeric($content)) {
+                $this->type = ApiResponse::TYPE_NUMBER;
+                return;
+            }
+
+            $this->type = ApiResponse::TYPE_STRING;
+            $this->content = strval($content);
         }
 
         /**
